@@ -32,4 +32,6 @@ public class UpdateProductRequest {
     private String imageUrl;
     
     private Long categoryId;
+
+    private Boolean active;
 }

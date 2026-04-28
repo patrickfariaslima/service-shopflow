@@ -13,6 +13,8 @@ import com.shopflow.shopflow.dto.LoginRequest;
 import com.shopflow.shopflow.dto.RegisterRequest;
 import com.shopflow.shopflow.entity.UserEntity;
 import com.shopflow.shopflow.enums.UserRole;
+import com.shopflow.shopflow.exception.BusinessException;
+import com.shopflow.shopflow.exception.ResourceNotFoundException;
 import com.shopflow.shopflow.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent())  {
-            throw new RuntimeException("Email already registered");
+            throw new BusinessException("Email already registered");
         }
 
         UserEntity user = UserEntity.builder()
@@ -49,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(LoginRequest request){
         authenticationManager.authenticate((new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())));
 
-        UserEntity user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         String token = jwtService.generateToken(user.getEmail());
         return AuthResponse.builder().token(token).build();
     }

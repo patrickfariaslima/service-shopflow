@@ -1,14 +1,16 @@
 package com.shopflow.shopflow.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.shopflow.shopflow.dto.CreateProductRequest;
 import com.shopflow.shopflow.dto.ProductResponse;
 import com.shopflow.shopflow.dto.UpdateProductRequest;
 import com.shopflow.shopflow.entity.ProductEntity;
+import com.shopflow.shopflow.exception.ResourceNotFoundException;
 import com.shopflow.shopflow.repository.CategoryRepository;
 import com.shopflow.shopflow.repository.ProductRepository;
 
@@ -19,11 +21,11 @@ import lombok.RequiredArgsConstructor;
 public class ProductServiceImpl implements ProductService{
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private String productNotFoundMessage = "Product not found with id: ";
 
     @Override
-    public List<ProductResponse> findAll(){
-        return productRepository.findAll()
-                .stream()
+    public Page<ProductResponse> findAll(Pageable pageble){
+        return productRepository.findByActiveTrue(pageble)
                 .map(entity -> ProductResponse.builder()
                         .id(entity.getId())
                         .name(entity.getName())
@@ -34,13 +36,12 @@ public class ProductServiceImpl implements ProductService{
                         .categoryName(entity.getCategory() != null ? entity.getCategory().getName() : null)
                         .active(entity.isActive())
                         .build()
-            )
-            .toList();
+            );
     }
 
     @Override
     public ProductResponse findById(Long id) {
-        return productRepository.findById(id)
+        return productRepository.findByIdAndActiveTrue(id)
                 .map(entity -> ProductResponse.builder()
                         .id(entity.getId())
                         .name(entity.getName())
@@ -51,16 +52,16 @@ public class ProductServiceImpl implements ProductService{
                         .categoryName(entity.getCategory() != null ? entity.getCategory().getName() : null)
                         .active(entity.isActive())
                         .build())
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(productNotFoundMessage + id));
     }
 
 
     @Override
     public void deleteProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
-        productRepository.deleteById(id);
+        ProductEntity product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(productNotFoundMessage + id));
+
+        product.setActive(false);
+        productRepository.save(product);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class ProductServiceImpl implements ProductService{
                 .active(true)
                 .category(product.getCategoryId() != null
                          ? categoryRepository.findById(product.getCategoryId())
-                         .orElseThrow(() -> new RuntimeException("Category not found")) 
+                         .orElseThrow(() -> new ResourceNotFoundException("Category not found")) 
                          : null)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -95,7 +96,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public ProductResponse updateProduct(Long id, UpdateProductRequest product) {
         ProductEntity entity = productRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                                .orElseThrow(() -> new ResourceNotFoundException(productNotFoundMessage + id));
         
         if (product.getName() != null) {
             entity.setName(product.getName());
@@ -123,8 +124,12 @@ public class ProductServiceImpl implements ProductService{
 
         if (product.getCategoryId() != null) {
             entity.setCategory(categoryRepository.findById(product.getCategoryId())
-                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + product.getCategoryId())));
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + product.getCategoryId())));
             
+        }
+
+        if (product.getActive() != null) {
+            entity.setActive(product.getActive());
         }
 
         ProductEntity updatedEntity = productRepository.save(entity);
