@@ -1,11 +1,11 @@
-package com.shopflow.shopflow.service;
+package com.shopflow.shopflow.service.product;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.shopflow.shopflow.dto.CreateProductRequest;
-import com.shopflow.shopflow.dto.ProductResponse;
-import com.shopflow.shopflow.dto.UpdateProductRequest;
+import com.shopflow.shopflow.dto.product.CreateProductRequest;
+import com.shopflow.shopflow.dto.product.ProductResponse;
+import com.shopflow.shopflow.dto.product.UpdateProductRequest;
 
 public interface ProductService {
     Page<ProductResponse> findAll(Pageable pageble);

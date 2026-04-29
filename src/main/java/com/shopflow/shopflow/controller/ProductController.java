@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shopflow.shopflow.dto.CreateProductRequest;
-import com.shopflow.shopflow.dto.ProductResponse;
-import com.shopflow.shopflow.dto.UpdateProductRequest;
-import com.shopflow.shopflow.service.ProductService;
+import com.shopflow.shopflow.dto.product.CreateProductRequest;
+import com.shopflow.shopflow.dto.product.ProductResponse;
+import com.shopflow.shopflow.dto.product.UpdateProductRequest;
+import com.shopflow.shopflow.service.product.ProductService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

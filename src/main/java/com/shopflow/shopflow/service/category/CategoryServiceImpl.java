@@ -1,12 +1,12 @@
-package com.shopflow.shopflow.service;
+package com.shopflow.shopflow.service.category;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.shopflow.shopflow.dto.CategoryResponse;
-import com.shopflow.shopflow.dto.CreateCategoryRequest;
-import com.shopflow.shopflow.dto.UpdateCategoryRequest;
+import com.shopflow.shopflow.dto.category.CategoryResponse;
+import com.shopflow.shopflow.dto.category.CreateCategoryRequest;
+import com.shopflow.shopflow.dto.category.UpdateCategoryRequest;
 import com.shopflow.shopflow.entity.CategoryEntity;
 import com.shopflow.shopflow.exception.ResourceNotFoundException;
 import com.shopflow.shopflow.repository.CategoryRepository;

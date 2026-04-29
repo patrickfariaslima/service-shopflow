@@ -3,10 +3,10 @@ package com.shopflow.shopflow.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shopflow.shopflow.dto.AuthResponse;
-import com.shopflow.shopflow.dto.LoginRequest;
-import com.shopflow.shopflow.dto.RegisterRequest;
-import com.shopflow.shopflow.service.AuthService;
+import com.shopflow.shopflow.dto.user.AuthResponse;
+import com.shopflow.shopflow.dto.user.LoginRequest;
+import com.shopflow.shopflow.dto.user.RegisterRequest;
+import com.shopflow.shopflow.service.auth.AuthService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

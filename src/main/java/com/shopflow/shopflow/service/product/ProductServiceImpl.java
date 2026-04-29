@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.service;
+package com.shopflow.shopflow.service.product;
 
 import java.time.LocalDateTime;
 
@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.shopflow.shopflow.dto.CreateProductRequest;
-import com.shopflow.shopflow.dto.ProductResponse;
-import com.shopflow.shopflow.dto.UpdateProductRequest;
+import com.shopflow.shopflow.dto.product.CreateProductRequest;
+import com.shopflow.shopflow.dto.product.ProductResponse;
+import com.shopflow.shopflow.dto.product.UpdateProductRequest;
 import com.shopflow.shopflow.entity.ProductEntity;
 import com.shopflow.shopflow.exception.ResourceNotFoundException;
 import com.shopflow.shopflow.repository.CategoryRepository;

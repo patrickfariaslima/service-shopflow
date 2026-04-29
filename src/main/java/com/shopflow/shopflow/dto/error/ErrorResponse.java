@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.dto;
+package com.shopflow.shopflow.dto.error;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.service;
+package com.shopflow.shopflow.service.jwt;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

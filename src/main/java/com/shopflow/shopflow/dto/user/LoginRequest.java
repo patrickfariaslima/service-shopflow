@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.dto;
+package com.shopflow.shopflow.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,12 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
-    @NotBlank(message = "Name is required")
-    private String name;
-
-    @Email(message = "Invalid email format")
+public class LoginRequest {
     @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
 
     @NotBlank(message = "Password is required")

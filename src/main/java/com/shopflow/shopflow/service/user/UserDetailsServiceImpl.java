@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.service;
+package com.shopflow.shopflow.service.user;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

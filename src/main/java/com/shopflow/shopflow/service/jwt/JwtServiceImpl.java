@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.service;
+package com.shopflow.shopflow.service.jwt;
 
 import java.util.Date;
 

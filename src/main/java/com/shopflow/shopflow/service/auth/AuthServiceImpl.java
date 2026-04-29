@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.service;
+package com.shopflow.shopflow.service.auth;
 
 import java.time.LocalDateTime;
 
@@ -8,14 +8,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.shopflow.shopflow.dto.AuthResponse;
-import com.shopflow.shopflow.dto.LoginRequest;
-import com.shopflow.shopflow.dto.RegisterRequest;
+import com.shopflow.shopflow.dto.user.AuthResponse;
+import com.shopflow.shopflow.dto.user.LoginRequest;
+import com.shopflow.shopflow.dto.user.RegisterRequest;
 import com.shopflow.shopflow.entity.UserEntity;
 import com.shopflow.shopflow.enums.UserRole;
 import com.shopflow.shopflow.exception.BusinessException;
 import com.shopflow.shopflow.exception.ResourceNotFoundException;
 import com.shopflow.shopflow.repository.UserRepository;
+import com.shopflow.shopflow.service.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.dto;
+package com.shopflow.shopflow.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

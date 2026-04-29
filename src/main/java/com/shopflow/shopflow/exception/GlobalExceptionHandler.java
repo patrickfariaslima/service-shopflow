@@ -10,7 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.shopflow.shopflow.dto.ErrorResponse;
+import com.shopflow.shopflow.dto.error.ErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
