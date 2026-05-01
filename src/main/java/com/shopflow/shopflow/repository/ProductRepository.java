@@ -1,6 +1,7 @@
 package com.shopflow.shopflow.repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -28,4 +29,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
         @Param("maxPrice") BigDecimal maxPrice,
         Pageable pageable
     );
+
+    @Query("SELECT p FROM ProductEntity p WHERE p.active = true " +
+    "AND p.stockThreshold IS NOT NULL " +
+    "AND p.stockQty <= p.stockThreshold")
+    List<ProductEntity> findLowStockProducts();
 }

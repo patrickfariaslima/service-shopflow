@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.shopflow.shopflow.service.auth.DenyListService;
 import com.shopflow.shopflow.service.jwt.JwtService;
 
 import jakarta.servlet.FilterChain;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
+    private final DenyListService denyListService;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -34,6 +36,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         final String token = authHeader.substring(7);
+        
+        if (denyListService.isInDenyList(token)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String username = jwtService.extractUserName(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

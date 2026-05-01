@@ -1,4 +1,4 @@
-package com.shopflow.shopflow.dto.user;
+package com.shopflow.shopflow.dto.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthResponse {
-    private String token; 
+    private String accessToken; 
+    private String refreshToken;
 }

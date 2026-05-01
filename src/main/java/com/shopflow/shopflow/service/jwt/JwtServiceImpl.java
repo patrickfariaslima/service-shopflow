@@ -18,6 +18,8 @@ public class JwtServiceImpl implements JwtService{
     private String secret;
     @Value("${jwt.expiration}")
     private long expiration;
+    @Value("${jwt.refresh-expiration}")
+    private long refreshExpiration;
 
     @Override
     public String generateToken(String username) {
@@ -45,6 +47,23 @@ public class JwtServiceImpl implements JwtService{
         return tokenUsername.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
+    @Override
+    public long getRemainingExpiration(String token) {
+        Date expirationDate = extractExpiration(token);
+
+        return expirationDate.getTime() - System.currentTimeMillis();
+    }
+    
+    @Override
+    public String generateRefreshToken(String username){
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                .signWith(getSiginingKey())
+                .compact();
+    }
+    
     private SecretKey getSiginingKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);

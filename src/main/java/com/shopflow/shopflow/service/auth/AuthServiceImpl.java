@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.shopflow.shopflow.dto.user.AuthResponse;
+import com.shopflow.shopflow.dto.token.AuthResponse;
 import com.shopflow.shopflow.dto.user.LoginRequest;
 import com.shopflow.shopflow.dto.user.RegisterRequest;
 import com.shopflow.shopflow.entity.UserEntity;
@@ -17,6 +17,7 @@ import com.shopflow.shopflow.exception.BusinessException;
 import com.shopflow.shopflow.exception.ResourceNotFoundException;
 import com.shopflow.shopflow.repository.UserRepository;
 import com.shopflow.shopflow.service.jwt.JwtService;
+import com.shopflow.shopflow.service.refreshtoken.RefreshTokenService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final DenyListService denyListService;
+    private final RefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -45,7 +48,9 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         userRepository.save(user);
         String token = jwtService.generateToken(user.getEmail());
-        return AuthResponse.builder().token(token).build();
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
+        refreshTokenService.store(refreshToken, user.getEmail());
+        return AuthResponse.builder().accessToken(token).refreshToken(refreshToken).build();
     }
 
     @Override
@@ -54,6 +59,37 @@ public class AuthServiceImpl implements AuthService {
 
         UserEntity user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         String token = jwtService.generateToken(user.getEmail());
-        return AuthResponse.builder().token(token).build();
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
+        refreshTokenService.store(refreshToken, user.getEmail());
+        return AuthResponse.builder().accessToken(token).refreshToken(refreshToken).build();
+    }
+
+    @Override
+    public void logout(String token, String refreshToken) {
+        long ttl = jwtService.getRemainingExpiration(token);
+        if (ttl > 0) {
+            denyListService.addToDenyList(token, ttl);
+        }
+        refreshTokenService.invalidate(refreshToken);
+    }
+
+    @Override
+    public AuthResponse refresh(String refreshToken) {
+        String userName = refreshTokenService.getUsername(refreshToken);
+
+        if (userName == null) {
+            throw new BusinessException("Invalid refresh token");
+        }
+
+        String newAccessToken = jwtService.generateToken(userName);
+        String newRefreshToken = jwtService.generateRefreshToken(userName);
+
+        refreshTokenService.invalidate(refreshToken);
+        refreshTokenService.store(newRefreshToken, userName);
+
+        return AuthResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build();
     }
 }
