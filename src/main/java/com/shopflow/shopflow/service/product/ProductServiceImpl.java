@@ -1,5 +1,6 @@
 package com.shopflow.shopflow.service.product;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
@@ -24,8 +25,8 @@ public class ProductServiceImpl implements ProductService{
     private String productNotFoundMessage = "Product not found with id: ";
 
     @Override
-    public Page<ProductResponse> findAll(Pageable pageble){
-        return productRepository.findByActiveTrue(pageble)
+    public Page<ProductResponse> findAll(Pageable pageble, Long categoryId, String name, BigDecimal minPrice, BigDecimal maxPrice) {
+        return productRepository.findWithFilters(categoryId, name, minPrice, maxPrice, pageble)
                 .map(entity -> ProductResponse.builder()
                         .id(entity.getId())
                         .name(entity.getName())

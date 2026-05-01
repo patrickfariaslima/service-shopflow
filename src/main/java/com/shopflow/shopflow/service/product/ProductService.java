@@ -1,5 +1,7 @@
 package com.shopflow.shopflow.service.product;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,7 +10,7 @@ import com.shopflow.shopflow.dto.product.ProductResponse;
 import com.shopflow.shopflow.dto.product.UpdateProductRequest;
 
 public interface ProductService {
-    Page<ProductResponse> findAll(Pageable pageble);
+    Page<ProductResponse> findAll(Pageable pageble, Long categoryId, String name, BigDecimal minPrice, BigDecimal maxPrice);
 
     ProductResponse findById(Long id);
 

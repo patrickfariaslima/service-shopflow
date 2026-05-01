@@ -12,6 +12,8 @@ import com.shopflow.shopflow.service.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,9 +34,12 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponse>> findAll(@RequestParam (defaultValue = "0") int page, @RequestParam (defaultValue = "12") int size) {
+    public ResponseEntity<Page<ProductResponse>> findAll(
+        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "12") int size, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) String name, @RequestParam(required = false) BigDecimal minPrice, @RequestParam(required = false) BigDecimal maxPrice
+    ) 
+    {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(productService.findAll(pageable));
+        return ResponseEntity.ok(productService.findAll(pageable, categoryId, name, minPrice, maxPrice));
     }
 
     @GetMapping("/{id}")
