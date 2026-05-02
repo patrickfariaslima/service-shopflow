@@ -65,3 +65,5 @@ buildNumber.properties
 ### Local environment ###
 src/main/resources/application-local.properties
 
+
+.claude

@@ -49,7 +49,7 @@ public class StockServiceImpl implements StockService{
 
         if (request.getType() == MovementType.IN) {
             product.setStockQty(product.getStockQty() + request.getQuantity());
-        } else if (request.getType() == MovementType.OUT) {
+        } else {
             if (product.getStockQty() < request.getQuantity()) {
                 throw new BusinessException("Insufficient stock.");
             } else {

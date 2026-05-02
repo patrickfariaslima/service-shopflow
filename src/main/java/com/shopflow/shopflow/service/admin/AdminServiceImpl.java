@@ -27,7 +27,7 @@ public class AdminServiceImpl implements AdminService{
                 .productName(p.getName())
                 .stockQty(p.getStockQty())
                 .stockThreshold(p.getStockThreshold())
-                .lowStock(p.getStockQty() <= p.getStockThreshold())
+                .lowStock(p.getStockThreshold() != null && p.getStockQty() <= p.getStockThreshold())
                 .build()
             ).toList();
 
